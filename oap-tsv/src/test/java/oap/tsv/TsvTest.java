@@ -46,13 +46,13 @@ public class TsvTest {
 
     @Test( dataProvider = "files" )
     public void loadTsv( String file ) {
-        TypedListModel model = Model.typedList( false )
+        var model = Model.typedList( false )
             .s( "c1", 1 )
             .i( "c3", 3 )
             .filterColumnCount( 4 );
-        Path path = Env.deployTestData( getClass() );
+        var path = Env.deployTestData( getClass() );
 
-        Stream<List<Object>> tsv = Tsv.tsv.fromPath( path.resolve( file ), model );
+        var tsv = Tsv.tsv.fromPath( path.resolve( file ), model );
         assertFile( path.resolve( "result.tsv" ) ).hasContent( Tsv.print( tsv ) );
     }
 
