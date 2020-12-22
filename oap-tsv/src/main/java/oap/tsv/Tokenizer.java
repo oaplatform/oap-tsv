@@ -52,7 +52,10 @@ public class Tokenizer implements Delimiters {
 
             if( tokens.size() == limit ) return tokens;
         }
-        tokens.add( line.substring( beginIndex ) );
+        if( quoted && line.charAt( beginIndex ) == '"' && line.charAt( line.length() - 1 ) == '"' )
+            tokens.add( line.substring( beginIndex + 1, line.length() - 1 ).replaceAll( "\"\"", "\"" ) );
+        else tokens.add( line.substring( beginIndex ) );
+
         return tokens;
     }
 }

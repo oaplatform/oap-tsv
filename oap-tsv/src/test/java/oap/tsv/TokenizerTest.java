@@ -51,6 +51,8 @@ public class TokenizerTest {
 
     @Test
     public void parseQuoted() {
+        assertThat( parse( "1,\"22\",33,\"44\"", COMMA, true ) )
+            .containsExactly( "1", "22", "33", "44" );
         assertThat( parse( "1,\"22\",33,44", COMMA, true ) )
             .containsExactly( "1", "22", "33", "44" );
         assertThat( parse( "1,\"2,2\",33,44", COMMA, true ) )

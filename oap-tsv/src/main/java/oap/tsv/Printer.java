@@ -31,32 +31,33 @@ import java.util.stream.Collectors;
 
 public class Printer implements Delimiters {
 
-    public static String print( Stream<List<Object>> stream, char delimiter ) {
+    public static <E> String print( Stream<List<E>> stream, char delimiter ) {
         return stream.map( l -> print( l, delimiter ) ).collect( Collectors.joining() );
     }
 
     public static String print( List<?> list, char delimiter ) {
+        return print( list, delimiter, false );
+    }
+
+    public static String print( List<?> list, char delimiter, boolean quoted ) {
         return Stream.of( list )
             .map( e -> {
                 String value = e == null ? "" : String.valueOf( e );
-                String result = "";
+                String result = quoted ? "\"" : "";
                 for( int i = 0; i < value.length(); i++ ) {
                     char c = value.charAt( i );
                     switch( c ) {
-                        case '\r':
-                            result += "\\r";
-                            break;
-                        case '\n':
-                            result += "\\n";
-                            break;
-                        case '\t':
-                            result += "\\t";
-                            break;
-                        default:
-                            result += c;
+                        case '\r' -> result += "\\r";
+                        case '\n' -> result += "\\n";
+                        case '\t' -> result += "\\t";
+                        case '"' -> {
+                            if( quoted ) result += "\"\"";
+                            else result += "\"";
+                        }
+                        default -> result += c;
                     }
                 }
-                return result;
+                return quoted ? result + "\"" : result;
             } )
             .collect( Collectors.joining( String.valueOf( delimiter ) ) ) + "\n";
 

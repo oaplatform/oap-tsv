@@ -26,13 +26,16 @@ package oap.tsv;
 
 import org.testng.annotations.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.List;
 
-public class MappingModelTest {
+import static oap.testng.Asserts.assertString;
+
+public class PrinterTest {
     @Test
-    public void map() {
-        MappingModel<String> model = new MappingModel<>( false, 1, l -> l.get( 0 ) );
-        assertThat( Tsv.csv.fromString( "a,1\nb,2", model ).toList() ).containsExactly( "a", "b" );
+    public void print() {
+        assertString( Printer.print( List.of( 1, 2, 3 ), Delimiters.TAB ) )
+            .isEqualTo( "1\t2\t3\n" );
+        assertString( Printer.print( List.of( 1, 2, 3 ), Delimiters.COMMA, true ) )
+            .isEqualTo( "\"1\",\"2\",\"3\"\n" );
     }
-
 }

@@ -22,10 +22,42 @@
  * SOFTWARE.
  */
 
-package oap.tsv;
+package oap.tsv.test;
 
-public class TsvException extends RuntimeException {
-    public TsvException( String message, Throwable cause ) {
-        super( message, cause );
+import org.testng.annotations.Test;
+
+import java.util.List;
+
+import static oap.tsv.test.TsvAssertion.assertTsv;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+public class TsvAssertionTest {
+
+    @Test
+    public void containsHeaders() {
+        assertTsv( "a\tb\tc\n1\t2\t3" ).hasHeaders( "a" );
+
+        assertThatThrownBy( () ->
+            assertTsv( "a\tb\tc\n1\t2\t3" ).hasHeaders( "unknown" ) )
+            .isInstanceOf( AssertionError.class );
+    }
+
+    @Test
+    public void containsExactly() {
+        String tsv = """
+            a\tb\tc
+            11\t12\t13
+            21\t22\t23
+            """;
+        assertTsv( tsv )
+            .contains(
+                List.of( "a", "b" ),
+                "11", "12"
+            );
+
+        assertThatThrownBy( () ->
+            assertTsv( tsv ).contains( List.of( "a", "b" ),
+                "11", "22" )
+                .isInstanceOf( AssertionError.class ) );
     }
 }
