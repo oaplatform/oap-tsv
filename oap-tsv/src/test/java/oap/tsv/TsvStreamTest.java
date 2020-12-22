@@ -26,6 +26,7 @@ package oap.tsv;
 
 import org.testng.annotations.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import static oap.testng.Asserts.assertString;
@@ -129,5 +130,12 @@ public class TsvStreamTest {
                 List.of( "a", "c" ),
                 List.of( "1", "3" ),
                 List.of( "1", "3" ) );
+    }
+
+    @Test
+    public void toTsvOutputStream() {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" ).collect( TsvStream.Collectors.toTsvOutputStream( bytes ) );
+        assertString( bytes.toString() ).isEqualTo( "a\tb\tc\n1\t2\t3\n1\t2\t3\n" );
     }
 }

@@ -29,12 +29,16 @@ import oap.util.IndexTranslatingList;
 import oap.util.Lists;
 import oap.util.Stream;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collector;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static oap.tsv.Delimiters.COMMA;
 import static oap.tsv.Delimiters.TAB;
 import static oap.tsv.Printer.print;
@@ -97,7 +101,6 @@ public class TsvStream {
         return select( Arrays.of( String.class, headers ) );
     }
 
-
     public List<List<String>> toList() {
         return collect( java.util.stream.Collectors.toList() );
     }
@@ -126,6 +129,19 @@ public class TsvStream {
 
 
     public static class Collectors {
+        public static Collector<List<String>, ?, OutputStream> toTsvOutputStream( OutputStream os ) {
+            return Collector.of(
+                () -> os,
+                ( out, line ) -> {
+                    try {
+                        out.write( print( line, TAB ).getBytes( UTF_8 ) );
+                    } catch( IOException e ) {
+                        throw new UncheckedIOException( e );
+                    }
+                },
+                ( out, outIgnored ) -> out );
+        }
+
         public static Collector<List<String>, ?, String> toCsvString() {
             return toXsv( line -> print( line, COMMA, true ) );
         }
