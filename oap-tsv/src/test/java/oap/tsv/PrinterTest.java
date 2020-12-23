@@ -37,5 +37,7 @@ public class PrinterTest {
             .isEqualTo( "1\t2\t3\n" );
         assertString( Printer.print( List.of( 1, 2, 3 ), Delimiters.COMMA, true ) )
             .isEqualTo( "\"1\",\"2\",\"3\"\n" );
+        assertString( Printer.print( List.of( 1, "\"2\\\"", 3 ), Delimiters.COMMA, true ) )
+            .isEqualTo( "\"1\",\"\"\"2\\\\\"\"\",\"3\"\n" );
     }
 }

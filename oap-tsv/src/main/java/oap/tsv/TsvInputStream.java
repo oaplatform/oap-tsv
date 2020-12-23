@@ -65,25 +65,6 @@ public class TsvInputStream extends FastBufferedInputStream {
         list.add( line.substring( start, i ) );
     }
 
-    static String escape( String text ) {
-        if( text == null || text.length() == 0 ) return "";
-
-        var sb = new StringBuilder();
-
-        for( var i = 0; i < text.length(); i++ ) {
-            var ch = text.charAt( i );
-            switch( ch ) {
-                case '\n' -> sb.append( "\\n" );
-                case '\r' -> sb.append( "\\r" );
-                case '\t' -> sb.append( "\\t" );
-                case '\\' -> sb.append( "\\\\" );
-                default -> sb.append( ch );
-            }
-        }
-
-        return sb.toString();
-    }
-
     public boolean readCells() throws IOException {
         line.cells.clear();
         var buffer = line.buffer;

@@ -72,8 +72,4 @@ public class TsvInputStreamTest {
         assertThat( split ).containsExactly( "start", "", "" );
     }
 
-    @Test
-    public void testEscape() {
-        assertString( TsvInputStream.escape( "1\n2\r3\t4\\5\\" ) ).isEqualTo( "1\\n2\\r3\\t4\\\\5\\\\" );
-    }
 }
