@@ -10,9 +10,6 @@ import java.util.ArrayList;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-/**
- * Created by igor.petrenko on 2019-10-01.
- */
 public class TsvInputStream extends FastBufferedInputStream {
     private static final char TAB = '\t';
     private static final char ESCAPE = '\\';
@@ -24,7 +21,7 @@ public class TsvInputStream extends FastBufferedInputStream {
         line = new Line( bytes );
     }
 
-    static void split( byte[] line, int len, IntArrayList list ) {
+    public static void split( byte[] line, int len, IntArrayList list ) {
         int i = 0;
         boolean escape = false;
         while( i < len ) {
@@ -42,7 +39,7 @@ public class TsvInputStream extends FastBufferedInputStream {
         list.add( i + 1 );
     }
 
-    static void split( String line, ArrayList<String> list ) {
+    public static void split( String line, ArrayList<String> list ) {
         assert line != null;
 
         var len = line.length();

@@ -12,9 +12,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-/**
- * Created by igor.petrenko on 2019-10-01.
- */
 public class TsvInputStreamTest {
 
     @Test

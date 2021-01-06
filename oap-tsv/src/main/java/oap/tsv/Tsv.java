@@ -45,14 +45,14 @@ public class Tsv {
 
     public static Tsv.Parser tsv = new Tsv.Parser() {
         @Override
-        protected List<String> parse( String line ) {
+        public List<String> parse( String line ) {
             return Tokenizer.parse( line, TAB, Integer.MAX_VALUE, false );
         }
     };
 
     public static Tsv.Parser csv = new Tsv.Parser() {
         @Override
-        protected List<String> parse( String line ) {
+        public List<String> parse( String line ) {
             return Tokenizer.parse( line, COMMA, Integer.MAX_VALUE, true );
         }
     };
@@ -95,7 +95,7 @@ public class Tsv {
             return fromStream( lines( url, encoding, progressCallback ) );
         }
 
-        protected abstract List<String> parse( String line );
+        public abstract List<String> parse( String line );
     }
 
 }
