@@ -29,7 +29,7 @@ import oap.util.Stream;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Printer implements Delimiters {
+public class Printer {
 
     public static <E> String print( Stream<List<E>> stream, char delimiter ) {
         return stream.map( l -> print( l, delimiter ) ).collect( Collectors.joining() );

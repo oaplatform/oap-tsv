@@ -28,7 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.testng.annotations.Test;
 
 import static oap.benchmark.Benchmark.benchmark;
-import static oap.tsv.Delimiters.TAB;
+import static oap.tsv.Tsv.DELIMITER_TAB;
 import static oap.tsv.Tokenizer.parse;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,10 +37,10 @@ public class TokenizerPerftest {
     @Test
     public void perf() {
         String tsv = "aaaa\tbbbb\txxxx\tddd\t19/11/2011\t33.3\taaaa\t11\txxx\tvvvv\tS\tS\t444\txxx\t4444\t1234\tN\tN";
-        assertThat( parse( tsv, TAB ) ).hasSize( 18 );
+        assertThat( parse( tsv, DELIMITER_TAB ) ).hasSize( 18 );
         benchmark( "split", 1000000, () -> StringUtils.splitByWholeSeparatorPreserveAllTokens( tsv, "\t" ) )
             .run();
-        benchmark( "tokenizer", 1000000, () -> parse( tsv, TAB ) )
+        benchmark( "tokenizer", 1000000, () -> parse( tsv, DELIMITER_TAB ) )
             .run();
     }
 

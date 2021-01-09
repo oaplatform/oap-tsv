@@ -38,22 +38,24 @@ import java.util.function.Consumer;
 
 import static oap.io.IoStreams.Encoding.PLAIN;
 import static oap.io.IoStreams.lines;
-import static oap.tsv.Delimiters.COMMA;
-import static oap.tsv.Delimiters.TAB;
 
 public class Tsv {
 
-    public static AbstractParser tsv = new AbstractParser() {
+    public static final char DELIMITER_SEMICOLON = ';';
+    public static final char DELIMITER_TAB = '\t';
+    public static final char DELIMITER_COMMA = ',';
+
+    public static final AbstractParser tsv = new AbstractParser() {
         @Override
         public List<String> parse( String line ) {
-            return Tokenizer.parse( line, TAB, Integer.MAX_VALUE, false );
+            return Tokenizer.parse( line, DELIMITER_TAB, Integer.MAX_VALUE, false );
         }
     };
 
-    public static AbstractParser csv = new AbstractParser() {
+    public static final AbstractParser csv = new AbstractParser() {
         @Override
         public List<String> parse( String line ) {
-            return Tokenizer.parse( line, COMMA, Integer.MAX_VALUE, true );
+            return Tokenizer.parse( line, DELIMITER_COMMA, Integer.MAX_VALUE, true );
         }
     };
 

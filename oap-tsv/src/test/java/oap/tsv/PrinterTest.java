@@ -33,11 +33,11 @@ import static oap.testng.Asserts.assertString;
 public class PrinterTest {
     @Test
     public void print() {
-        assertString( Printer.print( List.of( 1, 2, 3 ), Delimiters.TAB ) )
+        assertString( Printer.print( List.of( 1, 2, 3 ), Tsv.DELIMITER_TAB ) )
             .isEqualTo( "1\t2\t3\n" );
-        assertString( Printer.print( List.of( 1, 2, 3 ), Delimiters.COMMA, true ) )
+        assertString( Printer.print( List.of( 1, 2, 3 ), Tsv.DELIMITER_COMMA, true ) )
             .isEqualTo( "\"1\",\"2\",\"3\"\n" );
-        assertString( Printer.print( List.of( 1, "\"2\\\"", 3 ), Delimiters.COMMA, true ) )
+        assertString( Printer.print( List.of( 1, "\"2\\\"", 3 ), Tsv.DELIMITER_COMMA, true ) )
             .isEqualTo( "\"1\",\"\"\"2\\\\\"\"\",\"3\"\n" );
     }
 }

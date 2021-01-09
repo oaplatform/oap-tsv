@@ -39,8 +39,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collector;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static oap.tsv.Delimiters.COMMA;
-import static oap.tsv.Delimiters.TAB;
+import static oap.tsv.Tsv.DELIMITER_COMMA;
+import static oap.tsv.Tsv.DELIMITER_TAB;
 import static oap.tsv.Printer.print;
 
 public class TsvStream {
@@ -83,6 +83,15 @@ public class TsvStream {
             data.map( line -> new IndexTranslatingList<>( line, columns ) ) );
     }
 
+    public TsvStream select( String... headers ) {
+        TsvStream tsv = withHeaders();
+        return tsv.select( Lists.indices( tsv.headers, headers ) );
+    }
+
+    public TsvStream select( List<String> headers ) {
+        return select( Arrays.of( String.class, headers ) );
+    }
+
     public TsvStream stripHeaders() {
         return headers.isEmpty() ? new TsvStream( List.of(), withHeaders().data )
             : new TsvStream( List.of(), this.data );
@@ -92,14 +101,6 @@ public class TsvStream {
         return new TsvStream( this.headers, data.filter( filter ) );
     }
 
-    public TsvStream select( String... headers ) {
-        TsvStream tsv = withHeaders();
-        return tsv.select( Lists.indices( tsv.headers, headers ) );
-    }
-
-    public TsvStream select( List<String> headers ) {
-        return select( Arrays.of( String.class, headers ) );
-    }
 
     public List<List<String>> toList() {
         return collect( java.util.stream.Collectors.toList() );
@@ -134,7 +135,7 @@ public class TsvStream {
                 () -> os,
                 ( out, line ) -> {
                     try {
-                        out.write( print( line, TAB ).getBytes( UTF_8 ) );
+                        out.write( print( line, DELIMITER_TAB ).getBytes( UTF_8 ) );
                     } catch( IOException e ) {
                         throw new UncheckedIOException( e );
                     }
@@ -143,11 +144,11 @@ public class TsvStream {
         }
 
         public static Collector<List<String>, ?, String> toCsvString() {
-            return toXsv( line -> print( line, COMMA, true ) );
+            return toXsv( line -> print( line, DELIMITER_COMMA, true ) );
         }
 
         public static Collector<List<String>, ?, String> toTsvString() {
-            return toXsv( line -> print( line, TAB ) );
+            return toXsv( line -> print( line, DELIMITER_TAB ) );
         }
 
         private static Collector<List<String>, ?, String> toXsv( Function<List<String>, String> joiner ) {

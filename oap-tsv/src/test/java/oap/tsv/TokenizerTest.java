@@ -26,8 +26,8 @@ package oap.tsv;
 
 import org.testng.annotations.Test;
 
-import static oap.tsv.Delimiters.COMMA;
-import static oap.tsv.Delimiters.TAB;
+import static oap.tsv.Tsv.DELIMITER_COMMA;
+import static oap.tsv.Tsv.DELIMITER_TAB;
 import static oap.tsv.Tokenizer.parse;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,29 +35,29 @@ public class TokenizerTest {
 
     @Test
     public void parseSimple() {
-        assertThat( parse( "1,22,33,44", COMMA ) )
+        assertThat( parse( "1,22,33,44", DELIMITER_COMMA ) )
             .containsExactly( "1", "22", "33", "44" );
-        assertThat( parse( "1,22,33,", COMMA ) )
+        assertThat( parse( "1,22,33,", DELIMITER_COMMA ) )
             .containsExactly( "1", "22", "33", "" );
-        assertThat( parse( "1\t22\t33\t", TAB ) )
+        assertThat( parse( "1\t22\t33\t", DELIMITER_TAB ) )
             .containsExactly( "1", "22", "33", "" );
     }
 
     @Test
     public void parseLimited() {
-        assertThat( parse( "1,22,33,44", COMMA, 3, false ) )
+        assertThat( parse( "1,22,33,44", DELIMITER_COMMA, 3, false ) )
             .containsExactly( "1", "22", "33" );
     }
 
     @Test
     public void parseQuoted() {
-        assertThat( parse( "1,\"22\",33,\"44\"", COMMA, true ) )
+        assertThat( parse( "1,\"22\",33,\"44\"", DELIMITER_COMMA, true ) )
             .containsExactly( "1", "22", "33", "44" );
-        assertThat( parse( "1,\"22\",33,44", COMMA, true ) )
+        assertThat( parse( "1,\"22\",33,44", DELIMITER_COMMA, true ) )
             .containsExactly( "1", "22", "33", "44" );
-        assertThat( parse( "1,\"2,2\",33,44", COMMA, true ) )
+        assertThat( parse( "1,\"2,2\",33,44", DELIMITER_COMMA, true ) )
             .containsExactly( "1", "2,2", "33", "44" );
-        assertThat( parse( "1,\"2\"\"2\",33,44", COMMA, true ) )
+        assertThat( parse( "1,\"2\"\"2\",33,44", DELIMITER_COMMA, true ) )
             .containsExactly( "1", "2\"2", "33", "44" );
     }
 }

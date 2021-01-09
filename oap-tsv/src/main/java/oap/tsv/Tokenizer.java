@@ -27,7 +27,7 @@ package oap.tsv;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Tokenizer implements Delimiters {
+public class Tokenizer {
     public static List<String> parse( String line, char delimiter ) {
         return parse( line, delimiter, Integer.MIN_VALUE, false );
     }
