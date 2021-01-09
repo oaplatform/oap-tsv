@@ -43,14 +43,14 @@ import static oap.tsv.Delimiters.TAB;
 
 public class Tsv {
 
-    public static Tsv.Parser tsv = new Tsv.Parser() {
+    public static AbstractParser tsv = new AbstractParser() {
         @Override
         public List<String> parse( String line ) {
             return Tokenizer.parse( line, TAB, Integer.MAX_VALUE, false );
         }
     };
 
-    public static Tsv.Parser csv = new Tsv.Parser() {
+    public static AbstractParser csv = new AbstractParser() {
         @Override
         public List<String> parse( String line ) {
             return Tokenizer.parse( line, COMMA, Integer.MAX_VALUE, true );
@@ -69,7 +69,7 @@ public class Tsv {
         return TsvStream.of( headers, Stream.of( data ) );
     }
 
-    public abstract static class Parser {
+    public abstract static class AbstractParser {
         public TsvStream fromString( String tsv ) {
             return fromStream( Stream.of( new BufferedReader( new StringReader( tsv ) ).lines() ) );
         }

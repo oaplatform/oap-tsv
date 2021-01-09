@@ -54,10 +54,18 @@ public class TsvAssertionTest {
                 List.of( "a", "b" ),
                 "11", "12"
             );
+        assertTsv( tsv )
+            .contains(
+                List.of( "a", "b" ),
+                "21", "22",
+                "11", "12"
+            );
 
         assertThatThrownBy( () ->
-            assertTsv( tsv ).contains( List.of( "a", "b" ),
-                "11", "22" )
+            assertTsv( tsv )
+                .contains(
+                    List.of( "a", "b" ),
+                    "11", "22" )
                 .isInstanceOf( AssertionError.class ) );
     }
 }
