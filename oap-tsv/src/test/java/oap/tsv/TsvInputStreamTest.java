@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static oap.testng.Asserts.assertString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
