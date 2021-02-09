@@ -35,12 +35,15 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
 
+import static oap.testng.Asserts.assertString;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TsvAssertion extends AbstractAssert<TsvAssertion, Tsv> {
+    private final String value;
 
     protected TsvAssertion( String value ) {
         super( Tsv.tsv.fromString( value ).withHeaders().toTsv(), TsvAssertion.class );
+        this.value = value;
     }
 
     public static TsvAssertion assertTsv( String tsv ) {
@@ -85,6 +88,12 @@ public class TsvAssertion extends AbstractAssert<TsvAssertion, Tsv> {
             .toTsv()
             .data )
             .contains( Arrays.map( List.class, List::of, Arrays.splitBy( String.class, headers.size(), entries ) ) );
+
+        return this;
+    }
+
+    public TsvAssertion doesNotContain( CharSequence... values ) {
+        assertString( value ).doesNotContain( values );
 
         return this;
     }
