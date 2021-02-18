@@ -39,9 +39,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collector;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static oap.tsv.Printer.print;
 import static oap.tsv.Tsv.DELIMITER_COMMA;
 import static oap.tsv.Tsv.DELIMITER_TAB;
-import static oap.tsv.Printer.print;
 
 public class TsvStream {
 
@@ -114,6 +114,10 @@ public class TsvStream {
         return collect( Collectors.toCsvString() );
     }
 
+    public String toCsvString( boolean quoted ) {
+        return collect( Collectors.toCsvString( quoted ) );
+    }
+
     public Tsv toTsv() {
         return new Tsv( headers, data.toList() );
     }
@@ -144,7 +148,11 @@ public class TsvStream {
         }
 
         public static Collector<List<String>, ?, String> toCsvString() {
-            return toXsv( line -> print( line, DELIMITER_COMMA, true ) );
+            return toCsvString( true );
+        }
+
+        public static Collector<List<String>, ?, String> toCsvString( boolean quoted ) {
+            return toXsv( line -> print( line, DELIMITER_COMMA, quoted ) );
         }
 
         public static Collector<List<String>, ?, String> toTsvString() {
