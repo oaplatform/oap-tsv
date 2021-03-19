@@ -51,9 +51,9 @@
     </modules>
 
     <properties>
-        <oap.tsv.project.version>2.1.1</oap.tsv.project.version>
+        <oap.tsv.project.version>2.1.2</oap.tsv.project.version>
 
-        <oap.deps.oap.version>8.5.7</oap.deps.oap.version>
-        <oap.deps.lombok.version>1.18.14</oap.deps.lombok.version>
+        <oap.deps.oap.version>9.0.1</oap.deps.oap.version>
+        <oap.deps.lombok.version>1.18.18</oap.deps.lombok.version>
     </properties>
 </project>
