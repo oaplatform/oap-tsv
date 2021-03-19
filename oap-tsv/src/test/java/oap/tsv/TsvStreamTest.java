@@ -45,6 +45,17 @@ public class TsvStreamTest {
     }
 
     @Test
+    public void csvUnquoted() {
+        String csv = """
+            1,2,3
+            1,2,3
+            """;
+        assertString( Tsv.csv.fromString( csv )
+            .toCsvString( false ) )
+            .isEqualTo( csv );
+    }
+
+    @Test
     public void toList() {
         assertThat( Tsv.tsv.fromString( "1\t2\t3\n1\t2\t3" )
             .toList() )
