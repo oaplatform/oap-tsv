@@ -25,7 +25,6 @@
 package oap.tsv;
 
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import oap.io.IoStreams;
 import oap.io.Resources;
 import oap.util.Stream;

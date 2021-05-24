@@ -26,9 +26,9 @@ package oap.tsv;
 
 import org.testng.annotations.Test;
 
+import static oap.tsv.Tokenizer.parse;
 import static oap.tsv.Tsv.DELIMITER_COMMA;
 import static oap.tsv.Tsv.DELIMITER_TAB;
-import static oap.tsv.Tokenizer.parse;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TokenizerTest {
