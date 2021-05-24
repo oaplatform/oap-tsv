@@ -141,7 +141,9 @@ public class TsvAssertion extends AbstractAssert<TsvAssertion, Tsv> {
     }
 
     public TsvAssertion isEqualToTsv( String tsv ) {
-        isEqualTo( Tsv.tsv.fromString( tsv ).withHeaders().toTsv() );
+        Tsv expected = Tsv.tsv.fromString( tsv ).withHeaders().toTsv();
+        hasHeaders( expected.headers );
+        assertThat( this.actual.data ).containsExactlyInAnyOrderElementsOf( expected.data );
         return this;
     }
 

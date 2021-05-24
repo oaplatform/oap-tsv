@@ -83,8 +83,16 @@ public class TsvAssertionTest {
 
     @Test
     public void isEqualTo() {
-        String tsv = "a\tb\tc\n1\t2\t3";
+        String tsv = """
+            a\tb\tc
+            1\t2\t3
+            3\t2\t1
+            """;
         assertTsv( tsv ).isEqualTo( Tsv.tsv.fromString( tsv ).withHeaders().toTsv() );
-        assertTsv( tsv ).isEqualToTsv( tsv );
+        assertTsv( tsv ).isEqualToTsv( """
+            a\tb\tc
+            3\t2\t1
+            1\t2\t3
+            """ );
     }
 }

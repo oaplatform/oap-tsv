@@ -28,11 +28,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.testng.annotations.Test;
 
 import static oap.benchmark.Benchmark.benchmark;
-import static oap.tsv.Tsv.DELIMITER_TAB;
 import static oap.tsv.Tokenizer.parse;
+import static oap.tsv.Tsv.DELIMITER_TAB;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TokenizerPerftest {
+public class TokenizerPerformance {
 
     @Test
     public void perf() {
