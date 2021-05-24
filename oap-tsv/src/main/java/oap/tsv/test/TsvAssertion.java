@@ -25,9 +25,9 @@
 package oap.tsv.test;
 
 import oap.io.Files;
+import oap.io.content.ContentReader;
 import oap.tsv.Tsv;
 import oap.util.Arrays;
-import oap.util.Strings;
 import org.assertj.core.api.AbstractAssert;
 
 import java.io.File;
@@ -35,31 +35,57 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
 
-import static oap.testng.Asserts.assertString;
+import static oap.io.content.ContentReader.ofString;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TsvAssertion extends AbstractAssert<TsvAssertion, Tsv> {
-    private final String value;
-
     protected TsvAssertion( String value ) {
-        super( Tsv.tsv.fromString( value ).withHeaders().toTsv(), TsvAssertion.class );
-        this.value = value;
+        this( value, true );
+    }
+
+    protected TsvAssertion( String value, boolean withHeaders ) {
+        this( withHeaders ? Tsv.tsv.fromString( value ).withHeaders().toTsv()
+            : Tsv.tsv.fromString( value ).toTsv() );
+    }
+
+    protected TsvAssertion( Tsv value ) {
+        super( value, TsvAssertion.class );
     }
 
     public static TsvAssertion assertTsv( String tsv ) {
+        return assertTsv( tsv, true );
+    }
+
+    public static TsvAssertion assertTsv( String tsv, boolean withHeaders ) {
+        return new TsvAssertion( tsv, withHeaders );
+    }
+
+    public static TsvAssertion assertTsv( Tsv tsv ) {
         return new TsvAssertion( tsv );
     }
 
     public static TsvAssertion assertTsv( Path path ) {
-        return new TsvAssertion( Files.readString( path ) );
+        return assertTsv( path, true );
+    }
+
+    public static TsvAssertion assertTsv( Path path, boolean withHeaders ) {
+        return assertTsv( Files.read( path, ofString() ), withHeaders );
     }
 
     public static TsvAssertion assertTsv( File file ) {
-        return new TsvAssertion( Files.readString( file.toPath() ) );
+        return assertTsv( file, true );
+    }
+
+    public static TsvAssertion assertTsv( File file, boolean withHeaders ) {
+        return assertTsv( Files.read( file.toPath(), ofString() ), withHeaders );
     }
 
     public static TsvAssertion assertTsv( InputStream is ) {
-        return new TsvAssertion( Strings.readString( is ) );
+        return assertTsv( is, true );
+    }
+
+    public static TsvAssertion assertTsv( InputStream is, boolean withHeaders ) {
+        return assertTsv( ContentReader.read( is, ofString() ), withHeaders );
     }
 
     public TsvAssertion hasHeaders( String... headers ) {
@@ -87,19 +113,39 @@ public class TsvAssertion extends AbstractAssert<TsvAssertion, Tsv> {
             .stripHeaders()
             .toTsv()
             .data )
-            .contains( Arrays.map( List.class, List::of, Arrays.splitBy( String.class, headers.size(), entries ) ) );
-
+            .containsExactlyInAnyOrderElementsOf(
+                List.of(
+                    Arrays.map( List.class, List::of,
+                        Arrays.splitBy( headers.size(), entries ) ) ) );
         return this;
     }
 
-    public TsvAssertion doesNotContain( CharSequence... values ) {
-        assertString( value ).doesNotContain( values );
-
+    public TsvAssertion doesNotContain( String... entries ) {
+        assertThat( actual.headers )
+            .withFailMessage( "tsv must contain headers" )
+            .isNotEmpty();
+        assertThat( entries.length % actual.headers.size() )
+            .withFailMessage( "entries length doesnt match headers" )
+            .isEqualTo( 0 );
+        assertThat( actual.data )
+            .doesNotContainAnyElementsOf(
+                List.of(
+                    Arrays.map( List.class, List::of,
+                        Arrays.splitBy( actual.headers.size(), entries ) ) ) );
         return this;
     }
 
     public TsvAssertion isNotEmpty() {
         assertThat( actual.data ).isNotEmpty();
         return this;
+    }
+
+    public TsvAssertion isEqualToTsv( String tsv ) {
+        isEqualTo( Tsv.tsv.fromString( tsv ).withHeaders().toTsv() );
+        return this;
+    }
+
+    public TsvAssertion isEqualToTsv( Path tsv ) {
+        return isEqualToTsv( Files.read( tsv, ofString() ) );
     }
 }

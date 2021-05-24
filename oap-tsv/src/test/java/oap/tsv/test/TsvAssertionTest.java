@@ -24,6 +24,7 @@
 
 package oap.tsv.test;
 
+import oap.tsv.Tsv;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -43,17 +44,12 @@ public class TsvAssertionTest {
     }
 
     @Test
-    public void containsExactly() {
+    public void contains() {
         String tsv = """
             a\tb\tc
             11\t12\t13
             21\t22\t23
             """;
-        assertTsv( tsv )
-            .contains(
-                List.of( "a", "b" ),
-                "11", "12"
-            );
         assertTsv( tsv )
             .contains(
                 List.of( "a", "b" ),
@@ -67,5 +63,28 @@ public class TsvAssertionTest {
                     List.of( "a", "b" ),
                     "11", "22" )
                 .isInstanceOf( AssertionError.class ) );
+    }
+
+    @Test
+    public void doesNotContain() {
+        String tsv = """
+            a\tb\tc
+            11\t12\t13
+            21\t22\t23
+            """;
+        assertTsv( tsv )
+            .doesNotContain( "11", "12", "14" );
+
+        assertThatThrownBy( () ->
+            assertTsv( tsv )
+                .doesNotContain( "11", "12", "13" )
+                .isInstanceOf( AssertionError.class ) );
+    }
+
+    @Test
+    public void isEqualTo() {
+        String tsv = "a\tb\tc\n1\t2\t3";
+        assertTsv( tsv ).isEqualTo( Tsv.tsv.fromString( tsv ).withHeaders().toTsv() );
+        assertTsv( tsv ).isEqualToTsv( tsv );
     }
 }

@@ -24,6 +24,8 @@
 
 package oap.tsv;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import oap.io.IoStreams;
 import oap.io.Resources;
 import oap.util.Stream;
@@ -39,6 +41,7 @@ import java.util.function.Consumer;
 import static oap.io.IoStreams.Encoding.PLAIN;
 import static oap.io.IoStreams.lines;
 
+@EqualsAndHashCode
 public class Tsv {
 
     public static final char DELIMITER_SEMICOLON = ';';
@@ -69,6 +72,11 @@ public class Tsv {
 
     public TsvStream stream() {
         return TsvStream.of( headers, Stream.of( data ) );
+    }
+
+    @Override
+    public String toString() {
+        return stream().toTsvString();
     }
 
     public abstract static class AbstractParser {
