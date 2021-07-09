@@ -30,6 +30,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import static oap.testng.Asserts.assertString;
+import static oap.tsv.test.TsvAssertion.assertTsv;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TsvStreamTest {
@@ -80,67 +81,73 @@ public class TsvStreamTest {
             .withHeaders()
             .headers() )
             .containsExactly( "a", "b", "c" );
-        assertThat( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
+        assertTsv( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
             .withHeaders()
-            .toList() )
-            .containsExactly(
+            .toTsv() )
+            .contains(
                 List.of( "a", "b", "c" ),
-                List.of( "1", "2", "3" ),
-                List.of( "1", "2", "3" ) );
+                "1", "2", "3",
+                "1", "2", "3" );
+    }
+
+    @Test
+    public void withHeadersEmpty() {
+        assertTsv( Tsv.csv.fromString( "" ).withHeaders().toTsv() )
+            .isEqualToTsv( "" );
     }
 
     @Test
     public void select() {
-        assertThat( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
+        assertTsv( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
             .withHeaders()
             .select( 0, 2 )
-            .toList() )
-            .containsExactly(
+            .toTsv() )
+            .contains(
                 List.of( "a", "c" ),
-                List.of( "1", "3" ),
-                List.of( "1", "3" ) );
+                "1", "3",
+                "1", "3" );
     }
 
     @Test
     public void selectByHeaders() {
-        assertThat( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
+        assertTsv( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
             .select( "a", "c" )
-            .toList() )
-            .containsExactly(
+            .toTsv() )
+            .contains(
                 List.of( "a", "c" ),
-                List.of( "1", "3" ),
-                List.of( "1", "3" ) );
-        assertThat( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
+                "1", "3",
+                "1", "3" );
+        assertTsv( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
             .withHeaders()
             .select( "a", "c" )
-            .toList() )
-            .containsExactly(
+            .toTsv() )
+            .contains(
                 List.of( "a", "c" ),
-                List.of( "1", "3" ),
-                List.of( "1", "3" ) );
+                "1", "3",
+                "1", "3" );
     }
 
     @Test
     public void stripHeaders() {
-        assertThat( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
+        assertTsv( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
             .stripHeaders()
-            .toList() )
-            .containsExactly(
+            .toTsv() )
+            .contains(
                 List.of( "1", "2", "3" ),
                 List.of( "1", "2", "3" ) );
     }
 
     @Test
     public void filter() {
-        assertThat( Tsv.tsv.fromString( "\n\na\tb\tc\n\n1\t2\t3\n1\t2\t3" )
+        assertTsv( Tsv.tsv.fromString( "\n\na\tb\tc\n\n1\t2\t3\n1\t2\t3" )
             .filter( line -> line.size() == 3 )
             .withHeaders()
             .select( 0, 2 )
-            .toList() )
-            .containsExactly(
+            .toTsv() )
+            .contains(
                 List.of( "a", "c" ),
-                List.of( "1", "3" ),
-                List.of( "1", "3" ) );
+                "1", "3",
+                "1", "3" );
     }
 
     @Test

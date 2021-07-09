@@ -103,6 +103,13 @@ public class TsvAssertion extends AbstractAssert<TsvAssertion, Tsv> {
         return this;
     }
 
+    @SafeVarargs
+    public final TsvAssertion contains( List<String>... entries ) {
+        assertThat( actual.data )
+            .containsExactlyInAnyOrderElementsOf( List.of( entries ) );
+        return this;
+    }
+
     public TsvAssertion contains( List<String> headers, String... entries ) {
         hasHeaders( headers );
         assertThat( entries.length % headers.size() )

@@ -70,7 +70,7 @@ public class TsvStream {
         if( !headers.isEmpty() ) return this;
         Iterator<List<String>> iterator = data.iterator();
         if( iterator.hasNext() ) return new TsvStream( iterator.next(), Stream.of( iterator ) );
-        return this;
+        return of( Stream.of( iterator ) );
     }
 
     public List<String> headers() {
