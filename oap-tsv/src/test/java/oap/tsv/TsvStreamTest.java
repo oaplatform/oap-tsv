@@ -109,6 +109,19 @@ public class TsvStreamTest {
     }
 
     @Test
+    public void toStream() {
+        assertThat( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
+            .withHeaders()
+            .select( 0, 2 )
+            .toStream()
+            .skip( 1 )
+            .toList() )
+            .containsExactly(
+                List.of( "1", "3" ),
+                List.of( "1", "3" ) );
+    }
+
+    @Test
     public void selectByHeaders() {
         assertTsv( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
             .select( "a", "c" )

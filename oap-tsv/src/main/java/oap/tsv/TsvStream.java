@@ -101,6 +101,9 @@ public class TsvStream {
         return new TsvStream( this.headers, data.filter( filter ) );
     }
 
+    public Stream<List<String>> toStream() {
+        return headers.isEmpty() ? data : Stream.of( List.of( headers ) ).concat( data );
+    }
 
     public List<List<String>> toList() {
         return collect( java.util.stream.Collectors.toList() );
