@@ -27,9 +27,9 @@ package oap.tsv.test;
 import oap.tsv.Tsv;
 import org.testng.annotations.Test;
 
-import java.util.List;
-
 import static oap.tsv.test.TsvAssertion.assertTsv;
+import static oap.tsv.test.TsvAssertion.header;
+import static oap.tsv.test.TsvAssertion.row;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class TsvAssertionTest {
@@ -44,40 +44,76 @@ public class TsvAssertionTest {
     }
 
     @Test
-    public void contains() {
+    public void containsExactlyInAnyOrderEntriesOf() {
         String tsv = """
             a\tb\tc
             11\t12\t13
             21\t22\t23
             """;
         assertTsv( tsv )
-            .contains(
-                List.of( "a", "b" ),
-                "21", "22",
-                "11", "12"
+            .containsExactlyInAnyOrderEntriesOf(
+                header( "a", "b" ),
+                row( "21", "22" ),
+                row( "11", "12" )
             );
 
         assertThatThrownBy( () ->
             assertTsv( tsv )
-                .contains(
-                    List.of( "a", "b" ),
-                    "11", "22" )
+                .containsExactlyInAnyOrderEntriesOf(
+                    header( "a", "b" ),
+                    row( "21", "22" )
+                )
+                .isInstanceOf( AssertionError.class ) );
+
+        assertThatThrownBy( () ->
+            assertTsv( tsv )
+                .containsExactlyInAnyOrderEntriesOf(
+                    header( "a", "b" ),
+                    row( "11", "22" ) )
                 .isInstanceOf( AssertionError.class ) );
     }
 
     @Test
-    public void doesNotContain() {
+    public void containsAnyEntriesOf() {
         String tsv = """
             a\tb\tc
             11\t12\t13
             21\t22\t23
             """;
         assertTsv( tsv )
-            .doesNotContain( "11", "12", "14" );
+            .containsAnyEntriesOf(
+                header( "a", "b" ),
+                row( "21", "22" ),
+                row( "11", "12" )
+            );
+
+        assertTsv( tsv )
+            .containsAnyEntriesOf(
+                header( "a", "b" ),
+                row( "21", "22" )
+            );
 
         assertThatThrownBy( () ->
             assertTsv( tsv )
-                .doesNotContain( "11", "12", "13" )
+                .containsAnyEntriesOf(
+                    header( "a", "b" ),
+                    row( "11", "22" ) )
+                .isInstanceOf( AssertionError.class ) );
+    }
+
+    @Test
+    public void doesNotContainAnyEntriesOf() {
+        String tsv = """
+            a\tb\tc
+            11\t12\t13
+            21\t22\t23
+            """;
+        assertTsv( tsv )
+            .doesNotContainAnyEntriesOf( row( "11", "12", "14" ) );
+
+        assertThatThrownBy( () ->
+            assertTsv( tsv )
+                .doesNotContainAnyEntriesOf( row( "11", "12", "13" ) )
                 .isInstanceOf( AssertionError.class ) );
     }
 

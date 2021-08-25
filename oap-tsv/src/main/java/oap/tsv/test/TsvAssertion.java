@@ -24,10 +24,13 @@
 
 package oap.tsv.test;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import oap.io.Files;
 import oap.io.content.ContentReader;
 import oap.tsv.Tsv;
-import oap.util.Arrays;
+import oap.tsv.TsvStream.Header;
+import oap.util.Lists;
 import org.assertj.core.api.AbstractAssert;
 
 import java.io.File;
@@ -88,6 +91,14 @@ public class TsvAssertion extends AbstractAssert<TsvAssertion, Tsv> {
         return assertTsv( ContentReader.read( is, ofString() ), withHeaders );
     }
 
+    public static Row row( String... cols ) {
+        return new Row( cols );
+    }
+
+    public static Header header( String... cols ) {
+        return new Header( cols );
+    }
+
     public TsvAssertion hasHeaders( String... headers ) {
         assertThat( actual.headers ).contains( headers );
         return this;
@@ -98,47 +109,82 @@ public class TsvAssertion extends AbstractAssert<TsvAssertion, Tsv> {
         return this;
     }
 
+    public TsvAssertion hasHeaders( Header header ) {
+        assertThat( actual.headers ).containsAll( header.cols );
+        return this;
+    }
+
     public TsvAssertion containOnlyHeaders( String... headers ) {
         assertThat( actual.headers ).containsOnly( headers );
         return this;
     }
 
     @SafeVarargs
-    public final TsvAssertion contains( List<String>... entries ) {
+    public final TsvAssertion containsExactlyInAnyOrderEntriesOf( List<String>... entries ) {
         assertThat( actual.data )
             .containsExactlyInAnyOrderElementsOf( List.of( entries ) );
         return this;
     }
 
-    public TsvAssertion contains( List<String> headers, String... entries ) {
-        hasHeaders( headers );
-        assertThat( entries.length % headers.size() )
-            .withFailMessage( "entries length doesnt match headers" )
-            .isEqualTo( 0 );
+    public TsvAssertion containsExactlyInAnyOrderEntriesOf( Header header, Row... rows ) {
+        hasHeaders( header );
+        for( var row : rows ) {
+            assertThat( row.cols )
+                .withFailMessage( "entries length doesnt match headers" )
+                .hasSize( header.size() );
+        }
         assertThat( actual.stream()
-            .select( headers )
+            .select( header )
             .stripHeaders()
             .toTsv()
             .data )
-            .containsExactlyInAnyOrderElementsOf(
-                List.of(
-                    Arrays.map( List.class, List::of,
-                        Arrays.splitBy( headers.size(), entries ) ) ) );
+            .containsExactlyInAnyOrderElementsOf( Lists.map( rows, r -> r.cols ) );
+
         return this;
     }
 
-    public TsvAssertion doesNotContain( String... entries ) {
+    public TsvAssertion containsAnyEntriesOf( Header header, Row... rows ) {
+        hasHeaders( header.cols );
+        for( var row : rows ) {
+            assertThat( row.cols )
+                .withFailMessage( "entries length doesnt match headers" )
+                .hasSize( header.size() );
+        }
+
+        assertThat( actual.stream()
+            .select( header )
+            .stripHeaders()
+            .toTsv()
+            .data )
+            .containsAnyElementsOf( Lists.map( rows, r -> r.cols ) );
+        return this;
+    }
+
+    public TsvAssertion containsOnlyOnceEntriesOf( Header header, Row... rows ) {
+        hasHeaders( header );
+        for( var row : rows ) {
+            assertThat( row.cols )
+                .withFailMessage( "entries length doesnt match headers" )
+                .hasSize( header.size() );
+        }
+        assertThat( actual.stream()
+            .select( header )
+            .stripHeaders()
+            .toTsv()
+            .data ).containsOnlyOnceElementsOf( Lists.map( rows, r -> r.cols ) );
+        return this;
+    }
+
+    public TsvAssertion doesNotContainAnyEntriesOf( Row... rows ) {
         assertThat( actual.headers )
             .withFailMessage( "tsv must contain headers" )
             .isNotEmpty();
-        assertThat( entries.length % actual.headers.size() )
-            .withFailMessage( "entries length doesnt match headers" )
-            .isEqualTo( 0 );
-        assertThat( actual.data )
-            .doesNotContainAnyElementsOf(
-                List.of(
-                    Arrays.map( List.class, List::of,
-                        Arrays.splitBy( actual.headers.size(), entries ) ) ) );
+        for( var row : rows ) {
+            assertThat( row.cols )
+                .withFailMessage( "entries length doesnt match headers" )
+                .hasSize( actual.headers.size() );
+        }
+        assertThat( actual.data ).doesNotContainAnyElementsOf( Lists.map( rows, r -> r.cols ) );
         return this;
     }
 
@@ -156,5 +202,15 @@ public class TsvAssertion extends AbstractAssert<TsvAssertion, Tsv> {
 
     public TsvAssertion isEqualToTsv( Path tsv ) {
         return isEqualToTsv( Files.read( tsv, ofString() ) );
+    }
+
+    @ToString
+    @EqualsAndHashCode
+    public static class Row {
+        private final List<String> cols;
+
+        public Row( String... cols ) {
+            this.cols = List.of( cols );
+        }
     }
 }

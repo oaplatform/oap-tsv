@@ -24,6 +24,8 @@
 
 package oap.tsv;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import oap.util.Arrays;
 import oap.util.IndexTranslatingList;
 import oap.util.Lists;
@@ -90,6 +92,10 @@ public class TsvStream {
 
     public TsvStream select( List<String> headers ) {
         return select( Arrays.of( String.class, headers ) );
+    }
+
+    public TsvStream select( Header header ) {
+        return select( header.cols );
     }
 
     public TsvStream stripHeaders() {
@@ -168,6 +174,20 @@ public class TsvStream {
                 ( sb, line ) -> sb.append( joiner.apply( line ) ),
                 StringBuilder::append,
                 StringBuilder::toString );
+        }
+    }
+
+    @ToString
+    @EqualsAndHashCode
+    public static class Header {
+        public final List<String> cols;
+
+        public Header( String... cols ) {
+            this.cols = List.of( cols );
+        }
+
+        public int size() {
+            return cols.size();
         }
     }
 }

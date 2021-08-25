@@ -31,6 +31,8 @@ import java.util.List;
 
 import static oap.testng.Asserts.assertString;
 import static oap.tsv.test.TsvAssertion.assertTsv;
+import static oap.tsv.test.TsvAssertion.header;
+import static oap.tsv.test.TsvAssertion.row;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TsvStreamTest {
@@ -84,10 +86,10 @@ public class TsvStreamTest {
         assertTsv( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
             .withHeaders()
             .toTsv() )
-            .contains(
-                List.of( "a", "b", "c" ),
-                "1", "2", "3",
-                "1", "2", "3" );
+            .containsExactlyInAnyOrderEntriesOf(
+                header( "a", "b", "c" ),
+                row( "1", "2", "3" ),
+                row( "1", "2", "3" ) );
     }
 
     @Test
@@ -102,10 +104,10 @@ public class TsvStreamTest {
             .withHeaders()
             .select( 0, 2 )
             .toTsv() )
-            .contains(
-                List.of( "a", "c" ),
-                "1", "3",
-                "1", "3" );
+            .containsExactlyInAnyOrderEntriesOf(
+                header( "a", "c" ),
+                row( "1", "3" ),
+                row( "1", "3" ) );
     }
 
     @Test
@@ -126,18 +128,18 @@ public class TsvStreamTest {
         assertTsv( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
             .select( "a", "c" )
             .toTsv() )
-            .contains(
-                List.of( "a", "c" ),
-                "1", "3",
-                "1", "3" );
+            .containsExactlyInAnyOrderEntriesOf(
+                header( "a", "c" ),
+                row( "1", "3" ),
+                row( "1", "3" ) );
         assertTsv( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
             .withHeaders()
             .select( "a", "c" )
             .toTsv() )
-            .contains(
-                List.of( "a", "c" ),
-                "1", "3",
-                "1", "3" );
+            .containsExactlyInAnyOrderEntriesOf(
+                header( "a", "c" ),
+                row( "1", "3" ),
+                row( "1", "3" ) );
     }
 
     @Test
@@ -145,7 +147,7 @@ public class TsvStreamTest {
         assertTsv( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
             .stripHeaders()
             .toTsv() )
-            .contains(
+            .containsExactlyInAnyOrderEntriesOf(
                 List.of( "1", "2", "3" ),
                 List.of( "1", "2", "3" ) );
     }
@@ -157,10 +159,10 @@ public class TsvStreamTest {
             .withHeaders()
             .select( 0, 2 )
             .toTsv() )
-            .contains(
-                List.of( "a", "c" ),
-                "1", "3",
-                "1", "3" );
+            .containsExactlyInAnyOrderEntriesOf(
+                header( "a", "c" ),
+                row( "1", "3" ),
+                row( "1", "3" ) );
     }
 
     @Test
