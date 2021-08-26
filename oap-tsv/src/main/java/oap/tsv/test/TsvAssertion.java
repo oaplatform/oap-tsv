@@ -175,6 +175,22 @@ public class TsvAssertion extends AbstractAssert<TsvAssertion, Tsv> {
         return this;
     }
 
+    public TsvAssertion doesNotContainAnyEntriesOf( Header header, Row... rows ) {
+        hasHeaders( header );
+        for( var row : rows ) {
+            assertThat( row.cols )
+                .withFailMessage( "entries length doesnt match headers" )
+                .hasSize( header.size() );
+        }
+
+        assertThat( actual.stream()
+            .select( header )
+            .stripHeaders()
+            .toTsv()
+            .data ).doesNotContainAnyElementsOf( Lists.map( rows, r -> r.cols ) );
+        return this;
+    }
+
     public TsvAssertion doesNotContainAnyEntriesOf( Row... rows ) {
         assertThat( actual.headers )
             .withFailMessage( "tsv must contain headers" )
