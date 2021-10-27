@@ -32,7 +32,7 @@
     <parent>
         <groupId>oap</groupId>
         <artifactId>oap.maven</artifactId>
-        <version>2.0.8</version>
+        <version>17.3.0.8</version>
     </parent>
 
     <packaging>pom</packaging>
@@ -51,9 +51,9 @@
     </modules>
 
     <properties>
-        <oap.tsv.project.version>3.5.1</oap.tsv.project.version>
+        <oap.tsv.project.version>17.3.5.1</oap.tsv.project.version>
 
-        <oap.deps.oap.version>9.15.6</oap.deps.oap.version>
+        <oap.deps.oap.version>17.9.18.3</oap.deps.oap.version>
         <oap.deps.lombok.version>1.18.20</oap.deps.lombok.version>
     </properties>
 </project>
