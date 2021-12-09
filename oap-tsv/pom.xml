@@ -33,7 +33,7 @@
     <parent>
         <groupId>oap</groupId>
         <artifactId>oap-tsv-parent</artifactId>
-        <version>${oap.tsv.project.version}</version>
+        <version>${oap-tsv.project.version}</version>
     </parent>
 
     <dependencies>
