@@ -27,7 +27,7 @@
     </modules>
 
     <properties>
-        <oap-tsv.project.version>17.3.5.1</oap-tsv.project.version>
+        <oap-tsv.project.version>17.3.6.0</oap-tsv.project.version>
 
         <oap.deps.oap.version>17.10.0.0</oap.deps.oap.version>
         <oap.deps.lombok.version>1.18.22</oap.deps.lombok.version>
