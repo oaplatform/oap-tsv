@@ -30,6 +30,7 @@ import oap.io.Resources;
 import oap.util.Stream;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -84,6 +85,14 @@ public class Tsv {
     }
 
     public abstract static class AbstractParser {
+        public TsvStream from( byte[] bytes ) {
+            return from( new ByteArrayInputStream( bytes ) );
+        }
+
+        public TsvStream from( byte[] bytes, int offset, int length ) {
+            return from( new ByteArrayInputStream( bytes, offset, length ) );
+        }
+
         public TsvStream from( InputStream inputStream ) {
             return from( inputStream, UTF_8 );
         }
