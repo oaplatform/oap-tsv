@@ -30,13 +30,18 @@ import oap.io.Resources;
 import oap.util.Stream;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static oap.io.IoStreams.Encoding.PLAIN;
 import static oap.io.IoStreams.lines;
 
@@ -79,8 +84,20 @@ public class Tsv {
     }
 
     public abstract static class AbstractParser {
+        public TsvStream from( InputStream inputStream ) {
+            return from( inputStream, UTF_8 );
+        }
+
+        public TsvStream from( InputStream inputStream, Charset charset ) {
+            return from( new InputStreamReader( inputStream, charset ) );
+        }
+
+        public TsvStream from( Reader reader ) {
+            return fromStream( Stream.of( new BufferedReader( reader ).lines() ) );
+        }
+
         public TsvStream fromString( String tsv ) {
-            return fromStream( Stream.of( new BufferedReader( new StringReader( tsv ) ).lines() ) );
+            return from( new StringReader( tsv ) );
         }
 
         public TsvStream fromStream( Stream<String> stream ) {
