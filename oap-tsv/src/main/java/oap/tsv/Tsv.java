@@ -27,6 +27,7 @@ package oap.tsv;
 import lombok.EqualsAndHashCode;
 import oap.io.IoStreams;
 import oap.io.Resources;
+import oap.io.content.ContentReader;
 import oap.util.Stream;
 
 import java.io.BufferedReader;
@@ -85,14 +86,17 @@ public class Tsv {
     }
 
     public abstract static class AbstractParser {
+        @Deprecated
         public TsvStream from( byte[] bytes ) {
             return from( new ByteArrayInputStream( bytes ) );
         }
 
+        @Deprecated
         public TsvStream from( byte[] bytes, int offset, int length ) {
             return from( new ByteArrayInputStream( bytes, offset, length ) );
         }
 
+        @Deprecated
         public TsvStream from( InputStream inputStream ) {
             return from( inputStream, UTF_8 );
         }
@@ -105,6 +109,7 @@ public class Tsv {
             return fromStream( Stream.of( new BufferedReader( reader ).lines() ) );
         }
 
+        @Deprecated
         public TsvStream fromString( String tsv ) {
             return from( new StringReader( tsv ) );
         }
@@ -113,14 +118,17 @@ public class Tsv {
             return TsvStream.of( stream.map( this::parse ) );
         }
 
+        @Deprecated
         public Optional<TsvStream> fromResource( Class<?> contextClass, String name ) {
             return Resources.url( contextClass, name ).map( this::fromUrl );
         }
 
+        @Deprecated
         public TsvStream fromPath( Path path ) {
             return fromStream( lines( path ) );
         }
 
+        @Deprecated
         public TsvStream fromUrl( URL url ) {
             return fromUrl( url, PLAIN, p -> {} );
         }
@@ -128,6 +136,15 @@ public class Tsv {
         public TsvStream fromUrl( URL url, IoStreams.Encoding encoding,
                                   Consumer<Integer> progressCallback ) {
             return fromStream( lines( url, encoding, progressCallback ) );
+        }
+
+        public ContentReader<TsvStream> ofSeparatedValues() {
+            return new ContentReader<>() {
+                @Override
+                public TsvStream read( InputStream is ) {
+                    return from( is );
+                }
+            };
         }
 
         public abstract List<String> parse( String line );

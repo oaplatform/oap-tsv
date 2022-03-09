@@ -107,6 +107,10 @@ public class TsvStream {
         return new TsvStream( this.headers, data.filter( filter ) );
     }
 
+    public <E> Stream<E> mapToObj( Function<List<String>, ? extends E> mapper ) {
+        return data.map( mapper );
+    }
+
     public Stream<List<String>> toStream() {
         return headers.isEmpty() ? data : Stream.of( List.of( headers ) ).concat( data );
     }

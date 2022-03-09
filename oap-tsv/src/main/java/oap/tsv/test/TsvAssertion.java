@@ -47,8 +47,8 @@ public class TsvAssertion extends AbstractAssert<TsvAssertion, Tsv> {
     }
 
     protected TsvAssertion( String value, boolean withHeaders ) {
-        this( withHeaders ? Tsv.tsv.fromString( value ).withHeaders().toTsv()
-            : Tsv.tsv.fromString( value ).toTsv() );
+        this( withHeaders ? ContentReader.read( value, Tsv.tsv.ofSeparatedValues() ).withHeaders().toTsv()
+            : ContentReader.read( value, Tsv.tsv.ofSeparatedValues() ).toTsv() );
     }
 
     protected TsvAssertion( Tsv value ) {
@@ -210,7 +210,7 @@ public class TsvAssertion extends AbstractAssert<TsvAssertion, Tsv> {
     }
 
     public TsvAssertion isEqualToTsv( String tsv ) {
-        Tsv expected = Tsv.tsv.fromString( tsv ).withHeaders().toTsv();
+        Tsv expected = ContentReader.read( tsv, Tsv.tsv.ofSeparatedValues() ).withHeaders().toTsv();
         hasHeaders( expected.headers );
         assertThat( this.actual.data ).containsExactlyInAnyOrderElementsOf( expected.data );
         return this;

@@ -24,6 +24,7 @@
 
 package oap.tsv;
 
+import oap.io.content.ContentReader;
 import org.testng.annotations.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -42,7 +43,7 @@ public class TsvStreamTest {
             "1","2","3"
             "1","2","3"
             """;
-        assertString( Tsv.csv.fromString( csv )
+        assertString( ContentReader.read( csv, Tsv.csv.ofSeparatedValues() )
             .toCsvString() )
             .isEqualTo( csv );
     }
@@ -53,14 +54,14 @@ public class TsvStreamTest {
             1,2,3
             1,2,3
             """;
-        assertString( Tsv.csv.fromString( csv )
+        assertString( ContentReader.read( csv, Tsv.csv.ofSeparatedValues() )
             .toCsvString( false ) )
             .isEqualTo( csv );
     }
 
     @Test
     public void toList() {
-        assertThat( Tsv.tsv.fromString( "1\t2\t3\n1\t2\t3" )
+        assertThat( ContentReader.read( "1\t2\t3\n1\t2\t3", Tsv.tsv.ofSeparatedValues() )
             .toList() )
             .containsExactly(
                 List.of( "1", "2", "3" ),
@@ -69,21 +70,21 @@ public class TsvStreamTest {
 
     @Test
     public void toStrng() {
-        assertString( Tsv.tsv.fromString( "1\t2\t3\n1\t2\t3" )
+        assertString( ContentReader.read( "1\t2\t3\n1\t2\t3", Tsv.tsv.ofSeparatedValues() )
             .toTsvString() )
             .isEqualTo( "1\t2\t3\n1\t2\t3\n" );
     }
 
     @Test
     public void withHeaders() {
-        assertThat( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
+        assertThat( ContentReader.read( "a\tb\tc\n1\t2\t3\n1\t2\t3", Tsv.tsv.ofSeparatedValues() )
             .withHeaders()
             .withHeaders()
             .withHeaders()
             .withHeaders()
             .headers() )
             .containsExactly( "a", "b", "c" );
-        assertTsv( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
+        assertTsv( ContentReader.read( "a\tb\tc\n1\t2\t3\n1\t2\t3", Tsv.tsv.ofSeparatedValues() )
             .withHeaders()
             .toTsv() )
             .containsExactlyInAnyOrderEntriesOf(
@@ -94,13 +95,13 @@ public class TsvStreamTest {
 
     @Test
     public void withHeadersEmpty() {
-        assertTsv( Tsv.csv.fromString( "" ).withHeaders().toTsv() )
+        assertTsv( ContentReader.read( "", Tsv.tsv.ofSeparatedValues() ).withHeaders().toTsv() )
             .isEqualToTsv( "" );
     }
 
     @Test
     public void select() {
-        assertTsv( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
+        assertTsv( ContentReader.read( "a\tb\tc\n1\t2\t3\n1\t2\t3", Tsv.tsv.ofSeparatedValues() )
             .withHeaders()
             .select( 0, 2 )
             .toTsv() )
@@ -112,7 +113,7 @@ public class TsvStreamTest {
 
     @Test
     public void toStream() {
-        assertThat( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
+        assertThat( ContentReader.read( "a\tb\tc\n1\t2\t3\n1\t2\t3", Tsv.tsv.ofSeparatedValues() )
             .withHeaders()
             .select( 0, 2 )
             .toStream()
@@ -125,14 +126,14 @@ public class TsvStreamTest {
 
     @Test
     public void selectByHeaders() {
-        assertTsv( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
+        assertTsv( ContentReader.read( "a\tb\tc\n1\t2\t3\n1\t2\t3", Tsv.tsv.ofSeparatedValues() )
             .select( "a", "c" )
             .toTsv() )
             .containsExactlyInAnyOrderEntriesOf(
                 header( "a", "c" ),
                 row( "1", "3" ),
                 row( "1", "3" ) );
-        assertTsv( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
+        assertTsv( ContentReader.read( "a\tb\tc\n1\t2\t3\n1\t2\t3", Tsv.tsv.ofSeparatedValues() )
             .withHeaders()
             .select( "a", "c" )
             .toTsv() )
@@ -144,7 +145,7 @@ public class TsvStreamTest {
 
     @Test
     public void stripHeaders() {
-        assertTsv( Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" )
+        assertTsv( ContentReader.read( "a\tb\tc\n1\t2\t3\n1\t2\t3", Tsv.tsv.ofSeparatedValues() )
             .stripHeaders()
             .toTsv() )
             .containsExactlyInAnyOrderEntriesOf(
@@ -154,7 +155,7 @@ public class TsvStreamTest {
 
     @Test
     public void filter() {
-        assertTsv( Tsv.tsv.fromString( "\n\na\tb\tc\n\n1\t2\t3\n1\t2\t3" )
+        assertTsv( ContentReader.read( "\n\na\tb\tc\n\n1\t2\t3\n1\t2\t3", Tsv.tsv.ofSeparatedValues() )
             .filter( line -> line.size() == 3 )
             .withHeaders()
             .select( 0, 2 )
@@ -168,7 +169,17 @@ public class TsvStreamTest {
     @Test
     public void toTsvOutputStream() {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        Tsv.tsv.fromString( "a\tb\tc\n1\t2\t3\n1\t2\t3" ).collect( TsvStream.Collectors.toTsvOutputStream( bytes ) );
+        ContentReader.read( "a\tb\tc\n1\t2\t3\n1\t2\t3", Tsv.tsv.ofSeparatedValues() )
+            .collect( TsvStream.Collectors.toTsvOutputStream( bytes ) );
         assertString( bytes.toString() ).isEqualTo( "a\tb\tc\n1\t2\t3\n1\t2\t3\n" );
     }
+
+    @Test
+    public void mapToObj() {
+        assertThat( ContentReader.read( "a\tb\tc\n1\t2\t3\n1\t2\t3", Tsv.tsv.ofSeparatedValues() )
+            .withHeaders()
+            .mapToObj( l -> Integer.parseInt( l.get( 0 ) ) ) )
+            .containsExactly( 1, 1 );
+    }
+
 }

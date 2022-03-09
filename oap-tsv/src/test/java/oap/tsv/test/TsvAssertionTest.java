@@ -24,6 +24,7 @@
 
 package oap.tsv.test;
 
+import oap.io.content.ContentReader;
 import oap.tsv.Tsv;
 import org.testng.annotations.Test;
 
@@ -124,7 +125,7 @@ public class TsvAssertionTest {
             1\t2\t3
             3\t2\t1
             """;
-        assertTsv( tsv ).isEqualTo( Tsv.tsv.fromString( tsv ).withHeaders().toTsv() );
+        assertTsv( tsv ).isEqualTo( ContentReader.read( tsv, Tsv.tsv.ofSeparatedValues() ).withHeaders().toTsv() );
         assertTsv( tsv ).isEqualToTsv( """
             a\tb\tc
             3\t2\t1
