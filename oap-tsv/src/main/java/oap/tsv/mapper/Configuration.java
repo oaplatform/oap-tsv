@@ -53,6 +53,16 @@ public class Configuration {
         this( List.of( columns ) );
     }
 
+    public Configuration withColumnsNumber( int columnsNumber ) {
+        this.columnsNumber = columnsNumber;
+        return this;
+    }
+
+    public Configuration withValidateInput( boolean validateInput ) {
+        this.validateInput = validateInput;
+        return this;
+    }
+
     public TsvStream configure( TsvStream stream ) {
         var result = stream;
         if( hasHeaders ) result = result.withHeaders();

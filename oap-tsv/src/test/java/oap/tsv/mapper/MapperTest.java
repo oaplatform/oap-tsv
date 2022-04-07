@@ -38,7 +38,9 @@ public class MapperTest {
         assertThat( contentOfTestResource( getClass(), "config.json", ofJson( Configuration.class ) ) )
             .isEqualTo( new Configuration(
                 new Configuration.Column( 0, "a" ),
-                new Configuration.Column( 1, "b" ) ) );
+                new Configuration.Column( 1, "b" ) )
+                .withColumnsNumber( 3 )
+                .withValidateInput( true ) );
     }
 
     @Test
