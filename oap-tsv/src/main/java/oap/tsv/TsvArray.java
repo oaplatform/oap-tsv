@@ -31,7 +31,6 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
-import java.util.function.Function;
 
 public class TsvArray {
     public static String print( List<Object> list, DateTimeFormatter dateTimeFormatter ) {
@@ -54,9 +53,9 @@ public class TsvArray {
         return StringUtils.replace( item, "'", "\\'" );
     }
 
-    public static List<Object> parse( String item, Function<String, Object> strToObject, Function<String, Object> objToObject ) {
+    public static List<String> parse( String item ) {
         var array = item.substring( 1, item.length() - 1 );
-        List<Object> ret = new ArrayList<>();
+        List<String> ret = new ArrayList<>();
 
         if( array.isEmpty() ) return ret;
 
@@ -64,7 +63,6 @@ public class TsvArray {
 
         boolean strBegin = false;
         boolean escape = false;
-        boolean asString = false;
 
         for( var i = 0; i < array.length(); i++ ) {
             var ch = array.charAt( i );
@@ -74,17 +72,11 @@ public class TsvArray {
                         sb.append( '\'' );
                         escape = false;
                     }
-                    if( strBegin ) {
-                        asString = true;
-                        strBegin = false;
-                    } else {
-                        strBegin = true;
-                    }
+                    strBegin = !strBegin;
                     break;
                 case ',':
-                    ret.add( asString ? strToObject.apply( sb.toString() ) : objToObject.apply( sb.toString() ) );
+                    ret.add( sb.toString() );
                     sb.delete( 0, sb.length() );
-                    asString = false;
                     break;
                 case '\\':
                     if( escape ) {
@@ -104,7 +96,7 @@ public class TsvArray {
             }
         }
 
-        ret.add( asString ? strToObject.apply( sb.toString() ) : objToObject.apply( sb.toString() ) );
+        ret.add( sb.toString() );
 
         return ret;
     }

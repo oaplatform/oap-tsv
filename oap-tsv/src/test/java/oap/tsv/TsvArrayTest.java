@@ -42,8 +42,8 @@ public class TsvArrayTest extends TestCase {
 
     @Test
     public void testParse() {
-        assertThat( TsvArray.parse( "[1,2,3]", str -> str, Integer::parseInt ) ).isEqualTo( List.of( 1, 2, 3 ) );
-        assertThat( TsvArray.parse( "['1','2','3']", str -> str, Integer::parseInt ) ).isEqualTo( List.of( "1", "2", "3" ) );
-        assertThat( TsvArray.parse( "['1','\\'2','3']", str -> str, Integer::parseInt ) ).isEqualTo( List.of( "1", "'2", "3" ) );
+        assertThat( TsvArray.parse( "[1,2,3]" ) ).isEqualTo( List.of( "1", "2", "3" ) );
+        assertThat( TsvArray.parse( "['1','2','3']" ) ).isEqualTo( List.of( "1", "2", "3" ) );
+        assertThat( TsvArray.parse( "['1','\\'2','3']" ) ).isEqualTo( List.of( "1", "'2", "3" ) );
     }
 }
