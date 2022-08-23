@@ -31,9 +31,9 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import static oap.testng.Asserts.assertString;
-import static oap.tsv.test.TsvAssertion.assertTsv;
-import static oap.tsv.test.TsvAssertion.header;
-import static oap.tsv.test.TsvAssertion.row;
+import static oap.tsv.TsvAssertion.assertTsv;
+import static oap.tsv.TsvAssertion.header;
+import static oap.tsv.TsvAssertion.row;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TsvStreamTest {

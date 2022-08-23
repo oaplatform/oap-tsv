@@ -33,8 +33,8 @@ import java.util.function.Function;
 import static oap.util.Pair.__;
 
 public class Mapper<E> implements Function<List<String>, E> {
-    private Class<E> clazz;
-    private Configuration config;
+    private final Class<E> clazz;
+    private final Configuration config;
 
     public Mapper( Class<E> clazz, Configuration config ) {
         this.clazz = clazz;
