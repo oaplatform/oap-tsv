@@ -22,13 +22,12 @@
  * SOFTWARE.
  */
 
-package oap.tsv.test;
+package oap.tsv;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import oap.io.Files;
 import oap.io.content.ContentReader;
-import oap.tsv.Tsv;
 import oap.tsv.TsvStream.Header;
 import oap.util.Lists;
 import org.assertj.core.api.AbstractAssert;

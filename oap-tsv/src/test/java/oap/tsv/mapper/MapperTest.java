@@ -60,5 +60,5 @@ public class MapperTest {
             .containsExactly( new Bean( 1, 2 ), new Bean( 4, 5 ) );
     }
 
-    public static record Bean( int a, int b ) {}
+    record Bean( int a, int b ) {}
 }

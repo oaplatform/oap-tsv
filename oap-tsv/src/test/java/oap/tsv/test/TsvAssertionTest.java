@@ -28,9 +28,9 @@ import oap.io.content.ContentReader;
 import oap.tsv.Tsv;
 import org.testng.annotations.Test;
 
-import static oap.tsv.test.TsvAssertion.assertTsv;
-import static oap.tsv.test.TsvAssertion.header;
-import static oap.tsv.test.TsvAssertion.row;
+import static oap.tsv.TsvAssertion.assertTsv;
+import static oap.tsv.TsvAssertion.header;
+import static oap.tsv.TsvAssertion.row;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class TsvAssertionTest {
