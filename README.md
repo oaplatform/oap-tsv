@@ -6,3 +6,5 @@ It also has some rules to separate columns with data inside them, if it contains
 TSV alsways wrap dta into quotes if separator is comma.
 Like [1..3] becomes '"1","2","3"' (with tabs)
 and [1..3] becomes '1  2 3' (with comma)
+
+Strict rules also give TSV ability to be little bit faster than CSV
