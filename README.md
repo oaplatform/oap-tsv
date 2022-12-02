@@ -8,3 +8,5 @@ Like [1..3] becomes '"1","2","3"' (with tabs)
 and [1..3] becomes '1  2 3' (with comma)
 
 Strict rules also give TSV ability to be little bit faster than CSV
+
+See https://github.com/eBay/tsv-utils/blob/master/docs/comparing-tsv-and-csv.md
