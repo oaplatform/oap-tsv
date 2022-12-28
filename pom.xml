@@ -8,7 +8,7 @@
     <parent>
         <groupId>oap</groupId>
         <artifactId>oap.maven</artifactId>
-        <version>17.3.0.8</version>
+        <version>17.3.4.0</version>
     </parent>
 
     <packaging>pom</packaging>
@@ -27,7 +27,7 @@
     </modules>
 
     <properties>
-        <oap-tsv.project.version>17.4.1.6</oap-tsv.project.version>
+        <oap-tsv.project.version>17.4.1.7</oap-tsv.project.version>
 
         <oap.deps.oap.version>17.10.37.10</oap.deps.oap.version>
         <oap.deps.lombok.version>1.18.24</oap.deps.lombok.version>
