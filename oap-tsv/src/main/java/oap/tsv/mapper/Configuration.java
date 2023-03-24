@@ -78,5 +78,5 @@ public class Configuration {
         return result;
     }
 
-    public static record Column( int index, String name ) {}
+    public record Column( int index, String name ) {}
 }
