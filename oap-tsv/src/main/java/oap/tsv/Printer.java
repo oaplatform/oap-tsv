@@ -25,6 +25,7 @@
 package oap.tsv;
 
 import oap.util.Stream;
+import org.testng.util.Strings;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,7 +47,7 @@ public class Printer {
     }
 
     public static String escape( String text, boolean quoted ) {
-        if( text == null || text.length() == 0 ) return "";
+        if( Strings.isNullOrEmpty( text ) ) return "";
 
         var sb = new StringBuilder();
         if( quoted ) sb.append( '"' );

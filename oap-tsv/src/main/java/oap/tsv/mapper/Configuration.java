@@ -69,10 +69,11 @@ public class Configuration {
         if( validateInput ) {
             result = result.filter( line -> {
                 if( line.size() != columnsNumber ) {
-                    log.error( "erroneous line {}", line );
+                    log.error( "erroneous line in configuration '{}'", line );
                     if( skipErrors ) return false;
-                    else throw new IllegalArgumentException( "erroneous line " + line );
-                } else return true;
+                    throw new IllegalArgumentException( "erroneous line " + line );
+                }
+                return true;
             } );
         }
         return result;
