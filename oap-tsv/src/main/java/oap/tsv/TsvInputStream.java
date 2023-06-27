@@ -7,6 +7,8 @@ import lombok.ToString;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -39,8 +41,8 @@ public class TsvInputStream extends FastBufferedInputStream {
         list.add( i + 1 );
     }
 
-    public static void split( String line, ArrayList<String> list ) {
-        assert line != null;
+    public static void split( String line, List<String> list ) {
+        Objects.requireNonNull( line );
 
         var len = line.length();
 

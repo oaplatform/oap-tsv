@@ -37,10 +37,10 @@ public class TsvArray {
         StringJoiner sj = new StringJoiner( ",", "[", "]" );
 
         for( var item : list ) {
-            if( item instanceof String ) {
-                sj.add( "'" + escape( ( String ) item ) + "'" );
-            } else if( item instanceof DateTime ) {
-                sj.add( "'" + dateTimeFormatter.print( ( DateTime ) item ) + "'" );
+            if( item instanceof String items) {
+                sj.add( "'" + escape( items ) + "'" );
+            } else if( item instanceof DateTime itemd) {
+                sj.add( "'" + dateTimeFormatter.print( itemd ) + "'" );
             } else {
                 sj.add( String.valueOf( item ) );
             }
