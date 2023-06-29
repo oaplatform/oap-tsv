@@ -27,7 +27,7 @@
     </modules>
 
     <properties>
-        <oap-tsv.project.version>18.5.1.3</oap-tsv.project.version>
+        <oap-tsv.project.version>18.5.1.4</oap-tsv.project.version>
 
         <oap.deps.oap.version>18.11.5.20</oap.deps.oap.version>
 
