@@ -26,8 +26,8 @@
     <properties>
         <oap-tsv.project.version>18.6.0</oap-tsv.project.version>
 
-        <oap.deps.oap.version>18.13.0.log_formats.2030</oap.deps.oap.version>
+        <oap.deps.oap.version>18.13.0</oap.deps.oap.version>
 
-        <oap.deps.lombok.version>1.18.28</oap.deps.lombok.version>
+        <oap.deps.lombok.version>1.18.30</oap.deps.lombok.version>
     </properties>
 </project>
