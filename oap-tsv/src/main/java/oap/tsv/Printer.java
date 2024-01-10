@@ -24,8 +24,8 @@
 
 package oap.tsv;
 
+import com.google.common.base.Strings;
 import oap.util.Stream;
-import org.testng.util.Strings;
 
 import java.util.List;
 import java.util.stream.Collectors;
